@@ -18,4 +18,8 @@ export class RegistrationData {
   public isValidPassword(): boolean {
     return this.password.length >= 8;
   }
+
+  public isValid(): boolean {
+    return this.isValidEmail() && this.isValidPassword();
+  }
 }
