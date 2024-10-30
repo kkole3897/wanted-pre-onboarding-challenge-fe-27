@@ -1,12 +1,14 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import '@testing-library/jest-dom/vitest';
 
-import RegistrationForm from '../registration-form';
+import RegistrationForm, {
+  type RegistrationFormProps,
+} from '../registration-form';
 
-function renderRegistrationForm() {
-  const result = render(<RegistrationForm />);
+function renderRegistrationForm(props?: Partial<RegistrationFormProps>) {
+  const result = render(<RegistrationForm {...props} />);
 
   const EmailInput = () =>
     result.getByLabelText('이메일 *') as HTMLInputElement;
@@ -31,6 +33,10 @@ function renderRegistrationForm() {
     await userEvent.type(PasswordInput(), password);
   }
 
+  async function submit() {
+    await userEvent.click(SubmitButton());
+  }
+
   return {
     EmailInput,
     PasswordInput,
@@ -39,6 +45,7 @@ function renderRegistrationForm() {
     PasswordErrorMessage,
     changeEmail,
     changePassword,
+    submit,
   };
 }
 
@@ -109,5 +116,25 @@ describe('<RegistrationForm />', () => {
     await changePassword('1234');
 
     expect(PasswordErrorMessage()).toBeInTheDocument();
+  });
+
+  it('회원가입 버튼을 누르면 유효한 데이터를 전송한다.', async () => {
+    const fn = vi.fn();
+    const { changeEmail, changePassword, submit } = renderRegistrationForm({
+      onSubmit: fn,
+    });
+
+    const email = 'test@email.com';
+    const password = '12345678';
+
+    await changeEmail(email);
+    await changePassword(password);
+    await submit();
+
+    expect(fn).toHaveBeenCalled();
+    expect(fn).toHaveBeenCalledWith({
+      email,
+      password,
+    });
   });
 });

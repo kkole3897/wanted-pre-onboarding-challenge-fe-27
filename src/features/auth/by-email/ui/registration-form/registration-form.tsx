@@ -1,10 +1,17 @@
-import { useRegistrationForm } from '../../lib';
+import { useRegistrationForm, type RegistrationFormValues } from '../../lib';
 
-export default function RegistrationForm() {
-  const { register, isValid, errors } = useRegistrationForm();
+export type RegistrationFormProps = {
+  onSubmit?: (data: RegistrationFormValues) => void;
+};
+
+export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
+  const { register, isValid, errors, createHandleSubmit } =
+    useRegistrationForm();
+
+  const handleSubmit = createHandleSubmit(onSubmit);
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div>
         <div>
           <label htmlFor="email">이메일 *</label>

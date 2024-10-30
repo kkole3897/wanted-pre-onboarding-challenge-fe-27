@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 
 import { RegistrationData } from '../model';
 
-type FormValues = {
+export type FormValues = {
   email: string;
   password: string;
 };
@@ -79,11 +79,26 @@ export function useRegistrationForm() {
     };
   };
 
+  const createHandleSubmit =
+    (onSubmit?: (data: FormValues) => void) =>
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      if (!isValid) {
+        return;
+      }
+
+      console.log(formValues);
+
+      onSubmit?.(formValues);
+    };
+
   return {
     formValues,
     handleChange,
     errors,
     register,
     isValid,
+    createHandleSubmit,
   };
 }
