@@ -1,6 +1,7 @@
+import '@testing-library/jest-dom/vitest';
 import { describe, beforeEach, it, expect } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
-import '@testing-library/jest-dom/vitest';
+import userEvent from '@testing-library/user-event';
 
 import CreateTodoItemForm from '../create-todo-item-form';
 
@@ -13,10 +14,15 @@ function renderCreateTodoItemForm() {
   ) as HTMLTextAreaElement;
   const SubmitButton = result.getByText('추가') as HTMLButtonElement;
 
+  const changeTitle = async (title: string) => {
+    await userEvent.type(TitleInput, title);
+  };
+
   return {
     TitleInput,
     ContentInput,
     SubmitButton,
+    changeTitle,
   };
 }
 
@@ -33,5 +39,15 @@ describe('<CreateTodoItemForm />', () => {
     expect(ContentInput).toBeInTheDocument();
     expect(SubmitButton).toBeInTheDocument();
     expect(SubmitButton).toBeDisabled();
+  });
+
+  it('제목을 입력하면 추가 버튼이 활성화된다.', async () => {
+    const { TitleInput, SubmitButton, changeTitle } =
+      renderCreateTodoItemForm();
+
+    await changeTitle('1');
+
+    expect(TitleInput).toHaveValue('1');
+    expect(SubmitButton).toBeEnabled();
   });
 });

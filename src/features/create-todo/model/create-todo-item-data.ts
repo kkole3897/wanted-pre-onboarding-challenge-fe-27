@@ -1,11 +1,12 @@
+import z from 'zod';
+
 import { TodoItemSchema } from '@/entities/todo';
 
-export const CreateTodoItemDataSchema = TodoItemSchema.pick({
-  title: true,
-  content: true,
+export const CreateTodoItemDataSchema = z.object({
+  title: TodoItemSchema.shape.title.min(1),
+  content: TodoItemSchema.shape.content
+    .optional()
+    .transform((value) => value ?? ''),
 });
 
-export type CreateTodoItemData = {
-  title: string;
-  content: string;
-};
+export type CreateTodoItemData = z.infer<typeof CreateTodoItemDataSchema>;
