@@ -21,7 +21,7 @@ const validateRegisterResponse = (data: unknown): RegisterResponse => {
 };
 
 const RegisterErrorDataSchema = z.object({
-  message: z.string(),
+  details: z.string(),
 });
 
 type RegisterErrorData = z.infer<typeof RegisterErrorDataSchema>;
@@ -61,7 +61,7 @@ const validateLoginResponse = (data: unknown): LoginResponse => {
 };
 
 const LoginErrorDataSchema = z.object({
-  message: z.string(),
+  details: z.string(),
 });
 
 type LoginErrorData = z.infer<typeof LoginErrorDataSchema>;

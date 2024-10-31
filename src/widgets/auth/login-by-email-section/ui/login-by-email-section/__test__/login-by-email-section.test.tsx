@@ -108,7 +108,7 @@ describe('<LoginByEmailSection />', () => {
       http.post(`${api.core}/users/login`, () =>
         HttpResponse.json(
           {
-            message: '이메일 / 패스워드 값이 비어있습니다',
+            details: '이메일 / 패스워드 값이 비어있습니다',
           },
           { status: 400 }
         )

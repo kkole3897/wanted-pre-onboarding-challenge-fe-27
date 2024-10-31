@@ -24,7 +24,7 @@ export default function RegisterByEmailSection({
       onSuccess?.();
     } catch (error) {
       if (core.users.isRegisterError(error)) {
-        handleRegisterFail(error.response?.data.message);
+        handleRegisterFail(error.response?.data.details);
       } else {
         handleRegisterFail();
       }

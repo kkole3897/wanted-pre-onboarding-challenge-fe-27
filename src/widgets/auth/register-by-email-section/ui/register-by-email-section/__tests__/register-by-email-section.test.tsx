@@ -113,7 +113,7 @@ describe('<RegistrationByEmailSection />', () => {
       http.post(`${api.core}/users/create`, () =>
         HttpResponse.json(
           {
-            message: '이미 존재하는 유저입니다.',
+            details: '이미 존재하는 유저입니다.',
           },
           { status: 409 }
         )

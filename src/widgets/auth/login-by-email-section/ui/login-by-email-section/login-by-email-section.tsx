@@ -24,7 +24,7 @@ export default function LoginByEmailSection({
       onSuccess?.();
     } catch (error) {
       if (core.users.isLoginError(error)) {
-        handleLoginFail(error.response?.data.message);
+        handleLoginFail(error.response?.data.details);
       } else {
         handleLoginFail();
       }
