@@ -6,3 +6,4 @@ export {
   handleRegisterFail,
   handleRegisterSuccess,
 } from './handle-register-response';
+export { handleLoginSuccess } from './handle-login-response';

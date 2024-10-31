@@ -3,5 +3,6 @@ export { useRegisterMutation, useLoginMutation } from './query';
 export {
   handleRegisterFail,
   handleRegisterSuccess,
+  handleLoginSuccess,
   type RegistrationFormValues,
 } from './lib';
