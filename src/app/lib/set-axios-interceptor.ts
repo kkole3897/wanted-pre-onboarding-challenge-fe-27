@@ -1,10 +1,17 @@
 import { type AxiosInstance } from 'axios';
 
-import { TokenStorage } from '@/entities/visitor';
+import { useVisitorStore } from '@/entities/visitor';
+import { unstable_batchedUpdates } from 'react-dom';
+
+function clearAccessToken() {
+  unstable_batchedUpdates(() => {
+    useVisitorStore.getState().clearAccessToken();
+  });
+}
 
 export function setAxiosInterceptor(instance: AxiosInstance) {
   instance.interceptors.request.use((config) => {
-    const accessToken = TokenStorage.getAccessToken();
+    const accessToken = useVisitorStore.getState().accessToken;
     if (accessToken) {
       config.headers.Authorization = accessToken;
     }
@@ -15,10 +22,10 @@ export function setAxiosInterceptor(instance: AxiosInstance) {
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
-        const accessToken = TokenStorage.getAccessToken();
+        const accessToken = useVisitorStore.getState().accessToken;
 
         if (accessToken) {
-          TokenStorage.clear();
+          clearAccessToken();
           alert('로그인이 만료되었습니다. 다시 로그인해주세요');
         } else {
           alert('로그인이 필요합니다.');
