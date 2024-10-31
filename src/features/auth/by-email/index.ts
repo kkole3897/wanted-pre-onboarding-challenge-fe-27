@@ -4,5 +4,6 @@ export {
   handleRegisterFail,
   handleRegisterSuccess,
   handleLoginSuccess,
+  handleLoginFail,
   type RegistrationFormValues,
 } from './lib';

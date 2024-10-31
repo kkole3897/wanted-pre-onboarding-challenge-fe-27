@@ -80,10 +80,13 @@ describe('<LoginByEmailSection />', () => {
   it('로그인 성공', async () => {
     server.use(
       http.post(`${api.core}/users/login`, () =>
-        HttpResponse.json({
-          token,
-          message: '성공적으로 로그인 했습니다',
-        })
+        HttpResponse.json(
+          {
+            token,
+            message: '성공적으로 로그인 했습니다',
+          },
+          { status: 200 }
+        )
       )
     );
 
@@ -97,6 +100,29 @@ describe('<LoginByEmailSection />', () => {
     await vi.waitFor(() => {
       const storedToken = JSON.parse(localStorage.getItem(TOKEN_STORAGE_KEY)!);
       expect(storedToken.state.accessToken).toBe(token);
+    });
+  });
+
+  it('로그인에 실패한 경우 실패 응답 메시지를 표시한다.', async () => {
+    server.use(
+      http.post(`${api.core}/users/login`, () =>
+        HttpResponse.json(
+          {
+            message: '이메일 / 패스워드 값이 비어있습니다',
+          },
+          { status: 400 }
+        )
+      )
+    );
+
+    const { submit } = renderLoginByEmailSection();
+
+    await submit();
+
+    await vi.waitFor(() => {
+      expect(spyAlert).toHaveBeenCalledWith(
+        '이메일 / 패스워드 값이 비어있습니다'
+      );
     });
   });
 });
