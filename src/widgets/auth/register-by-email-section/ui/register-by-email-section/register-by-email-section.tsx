@@ -7,13 +7,21 @@ import {
 } from '@/features/auth/by-email';
 import { core } from '@/shared/api';
 
-export default function RegisterByEmailSection() {
+type RegisterByEmailSectionProps = {
+  onSuccess?: () => void;
+};
+
+export default function RegisterByEmailSection({
+  onSuccess,
+}: RegisterByEmailSectionProps) {
   const { mutateAsync, isPending } = useRegisterMutation();
 
   const handleSubmit = async (values: RegistrationFormValues) => {
     try {
-      await mutateAsync(values);
-      handleRegisterSuccess();
+      const { token } = await mutateAsync(values);
+
+      handleRegisterSuccess(token);
+      onSuccess?.();
     } catch (error) {
       if (core.users.isRegisterError(error)) {
         handleRegisterFail(error.response?.data.message);

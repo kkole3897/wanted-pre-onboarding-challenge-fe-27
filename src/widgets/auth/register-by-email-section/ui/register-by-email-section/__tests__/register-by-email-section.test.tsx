@@ -15,6 +15,7 @@ import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 
 import RegistrationByEmailSection from '../register-by-email-section';
+import { TOKEN_STORAGE_KEY } from '@/entities/visitor';
 import { api } from '@/shared/config';
 
 function renderRegistrationByEmailSection() {
@@ -70,6 +71,9 @@ afterAll(() => {
   server.close();
 });
 
+const token =
+  'eyJhbGciOiJIUzI1NiJ9.dGVzdDFAZW1haWwuY29t.Ooqf67TDpYpUY6DHaaJX3upGWi8_A1d9t-OcRhx3_O4';
+
 describe('<RegistrationByEmailSection />', () => {
   it('회원가입 성공', async () => {
     server.use(
@@ -77,8 +81,7 @@ describe('<RegistrationByEmailSection />', () => {
         HttpResponse.json(
           {
             message: '계정이 성공적으로 생성되었습니다',
-            token:
-              'eyJhbGciOiJIUzI1NiJ9.dGVzdDFAZW1haWwuY29t.Ooqf67TDpYpUY6DHaaJX3upGWi8_A1d9t-OcRhx3_O4',
+            token,
           },
           { status: 200 }
         )
@@ -97,6 +100,11 @@ describe('<RegistrationByEmailSection />', () => {
 
     await vi.waitFor(() => {
       expect(spyAlert).toHaveBeenCalledWith('계정이 성공적으로 생성되었습니다');
+    });
+
+    await vi.waitFor(() => {
+      const storedToken = JSON.parse(localStorage.getItem(TOKEN_STORAGE_KEY)!);
+      expect(storedToken.state.accessToken).toBe(token);
     });
   });
 

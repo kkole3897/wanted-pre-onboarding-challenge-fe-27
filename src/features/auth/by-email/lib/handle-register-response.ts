@@ -1,4 +1,15 @@
-export function handleRegisterSuccess() {
+import { unstable_batchedUpdates } from 'react-dom';
+
+import { useVisitorStore } from '@/entities/visitor';
+
+export function handleRegisterSuccess(accessToken: string) {
+  const setAccessToken = (accessToken: string) => {
+    unstable_batchedUpdates(() => {
+      useVisitorStore.getState().setAccessToken(accessToken);
+    });
+  };
+
+  setAccessToken(accessToken);
   window.alert('계정이 성공적으로 생성되었습니다');
 }
 
