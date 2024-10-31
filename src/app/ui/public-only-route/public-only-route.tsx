@@ -2,17 +2,17 @@ import { Navigate } from 'react-router-dom';
 
 import { useVisitorStore } from '@/entities/visitor';
 
-type ProtectedRouteProps = {
+type PublicOnlyRouteProps = {
   children: React.ReactNode;
 };
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+export default function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
   const isAuthenticated = useVisitorStore(
     (state) => state.accessToken !== undefined
   );
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" />;
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
   }
 
   return children;

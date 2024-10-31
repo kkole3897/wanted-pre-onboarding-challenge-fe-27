@@ -1,5 +1,6 @@
 import { type RouteObject } from 'react-router-dom';
 
+import { PublicOnlyRoute } from '../../ui';
 import { AuthPage } from '@/pages/auth';
 import { AuthRegistrationPage } from '@/pages/auth-registration';
 
@@ -8,11 +9,19 @@ export const auth: RouteObject = {
   children: [
     {
       path: '',
-      element: <AuthPage />,
+      element: (
+        <PublicOnlyRoute>
+          <AuthPage />
+        </PublicOnlyRoute>
+      ),
     },
     {
       path: 'register',
-      element: <AuthRegistrationPage />,
+      element: (
+        <PublicOnlyRoute>
+          <AuthRegistrationPage />
+        </PublicOnlyRoute>
+      ),
     },
   ],
 };
