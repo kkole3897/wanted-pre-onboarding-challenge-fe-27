@@ -18,11 +18,16 @@ function renderCreateTodoItemForm() {
     await userEvent.type(TitleInput, title);
   };
 
+  const changeContent = async (content: string) => {
+    await userEvent.type(ContentInput, content);
+  };
+
   return {
     TitleInput,
     ContentInput,
     SubmitButton,
     changeTitle,
+    changeContent,
   };
 }
 
@@ -39,6 +44,17 @@ describe('<CreateTodoItemForm />', () => {
     expect(ContentInput).toBeInTheDocument();
     expect(SubmitButton).toBeInTheDocument();
     expect(SubmitButton).toBeDisabled();
+  });
+
+  it('제목과 내용을 입력할 수 있다.', async () => {
+    const { TitleInput, ContentInput, changeTitle, changeContent } =
+      renderCreateTodoItemForm();
+
+    await changeTitle('1');
+    await changeContent('2');
+
+    expect(TitleInput).toHaveValue('1');
+    expect(ContentInput).toHaveValue('2');
   });
 
   it('제목을 입력하면 추가 버튼이 활성화된다.', async () => {
