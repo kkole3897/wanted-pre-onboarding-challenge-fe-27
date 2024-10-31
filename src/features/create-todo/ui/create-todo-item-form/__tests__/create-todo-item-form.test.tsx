@@ -1,12 +1,14 @@
 import '@testing-library/jest-dom/vitest';
-import { describe, beforeEach, it, expect } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import CreateTodoItemForm from '../create-todo-item-form';
+import CreateTodoItemForm, {
+  type CreateTodoItemFormProps,
+} from '../create-todo-item-form';
 
-function renderCreateTodoItemForm() {
-  const result = render(<CreateTodoItemForm />);
+function renderCreateTodoItemForm(props?: Partial<CreateTodoItemFormProps>) {
+  const result = render(<CreateTodoItemForm {...props} />);
 
   const TitleInput = result.getByPlaceholderText('제목') as HTMLInputElement;
   const ContentInput = result.getByPlaceholderText(
@@ -22,12 +24,17 @@ function renderCreateTodoItemForm() {
     await userEvent.type(ContentInput, content);
   };
 
+  const submit = async () => {
+    await userEvent.click(SubmitButton);
+  };
+
   return {
     TitleInput,
     ContentInput,
     SubmitButton,
     changeTitle,
     changeContent,
+    submit,
   };
 }
 
@@ -58,12 +65,26 @@ describe('<CreateTodoItemForm />', () => {
   });
 
   it('제목을 입력하면 추가 버튼이 활성화된다.', async () => {
-    const { TitleInput, SubmitButton, changeTitle } =
-      renderCreateTodoItemForm();
+    const { SubmitButton, changeTitle } = renderCreateTodoItemForm();
 
     await changeTitle('1');
 
-    expect(TitleInput).toHaveValue('1');
     expect(SubmitButton).toBeEnabled();
+  });
+
+  it('제출 버튼을 누르면 onSubmit 이벤트가 호출된다.', async () => {
+    const handleSubmit = vi.fn();
+    const { changeTitle, changeContent, submit } = renderCreateTodoItemForm({
+      onSubmit: handleSubmit,
+    });
+
+    await changeTitle('1');
+    await changeContent('2');
+    await submit();
+
+    expect(handleSubmit).toHaveBeenCalledWith({
+      title: '1',
+      content: '2',
+    });
   });
 });

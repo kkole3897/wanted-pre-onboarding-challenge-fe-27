@@ -33,9 +33,28 @@ export function useCreateTodoItemFormValues() {
     };
   };
 
+  const createHandleSubmit =
+    (onSubmit?: (data: CreateTodoItemData) => void) =>
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const formData = new FormData(event.currentTarget);
+
+      const { data, success } = CreateTodoItemDataSchema.safeParse(
+        Object.fromEntries(formData.entries())
+      );
+
+      if (!success) {
+        return;
+      }
+
+      onSubmit?.(data);
+    };
+
   return {
     values,
     isValid,
     register,
+    createHandleSubmit,
   };
 }
