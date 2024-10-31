@@ -1,4 +1,4 @@
-export { RegistrationForm } from './ui';
+export { RegistrationForm, LoginForm } from './ui';
 export { useRegisterMutation } from './query';
 export {
   handleRegisterFail,
