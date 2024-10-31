@@ -1,10 +1,14 @@
 import { useRegistrationForm, type RegistrationFormValues } from '../../lib';
 
 export type RegistrationFormProps = {
+  submitting?: boolean;
   onSubmit?: (data: RegistrationFormValues) => void;
 };
 
-export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
+export default function RegistrationForm({
+  submitting = false,
+  onSubmit,
+}: RegistrationFormProps) {
   const { register, isValid, errors, createHandleSubmit } =
     useRegistrationForm();
 
@@ -49,8 +53,8 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
           )}
         </div>
         <div>
-          <button type="submit" disabled={!isValid}>
-            회원가입하기
+          <button type="submit" disabled={!isValid || submitting}>
+            {submitting ? '처리 중' : '회원가입하기'}
           </button>
         </div>
       </div>

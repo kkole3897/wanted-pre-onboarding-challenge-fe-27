@@ -19,6 +19,9 @@ function renderRegistrationForm(props?: Partial<RegistrationFormProps>) {
   const SubmitButton = () =>
     result.getByText('회원가입하기') as HTMLButtonElement;
 
+  const SubmittingButton = () =>
+    result.getByText('처리 중') as HTMLButtonElement;
+
   const EmailErrorMessage = () =>
     result.queryByText('올바른 이메일 형식을 입력해주세요.');
 
@@ -37,6 +40,10 @@ function renderRegistrationForm(props?: Partial<RegistrationFormProps>) {
     await userEvent.click(SubmitButton());
   }
 
+  async function submitWhileSubmitting() {
+    await userEvent.click(SubmittingButton());
+  }
+
   return {
     EmailInput,
     PasswordInput,
@@ -46,6 +53,8 @@ function renderRegistrationForm(props?: Partial<RegistrationFormProps>) {
     changeEmail,
     changePassword,
     submit,
+    SubmittingButton,
+    submitWhileSubmitting,
   };
 }
 
@@ -136,5 +145,21 @@ describe('<RegistrationForm />', () => {
       email,
       password,
     });
+  });
+
+  it('회원가입 요청 중에는 처리 중인 상태를 표시하고, 버튼을 비활성화한다.', async () => {
+    const fn = vi.fn();
+
+    const { SubmittingButton, submitWhileSubmitting } = renderRegistrationForm({
+      submitting: true,
+      onSubmit: fn,
+    });
+
+    await submitWhileSubmitting();
+
+    expect(SubmittingButton()).toBeInTheDocument();
+    expect(SubmittingButton()).toBeDisabled();
+    expect(SubmittingButton()).toHaveTextContent('처리 중');
+    expect(fn).not.toHaveBeenCalled();
   });
 });

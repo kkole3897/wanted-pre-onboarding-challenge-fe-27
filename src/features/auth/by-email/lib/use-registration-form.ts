@@ -88,8 +88,6 @@ export function useRegistrationForm() {
         return;
       }
 
-      console.log(formValues);
-
       onSubmit?.(formValues);
     };
 
