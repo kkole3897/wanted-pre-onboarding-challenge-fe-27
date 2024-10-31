@@ -7,6 +7,7 @@ import { TOKEN_STORAGE_KEY } from '../constants';
 type VisitorState = Visitor;
 type VisitorActions = {
   setAccessToken: (accessToken: string) => void;
+  clearAccessToken: () => void;
 };
 
 type VisitorStore = VisitorState & VisitorActions;
@@ -16,6 +17,7 @@ export const useVisitorStore = create<VisitorStore>()(
     (set) => ({
       accessToken: undefined,
       setAccessToken: (accessToken) => set({ accessToken }),
+      clearAccessToken: () => set({ accessToken: undefined }),
     }),
     {
       name: TOKEN_STORAGE_KEY,
