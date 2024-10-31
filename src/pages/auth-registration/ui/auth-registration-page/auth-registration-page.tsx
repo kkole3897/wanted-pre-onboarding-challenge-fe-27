@@ -6,9 +6,9 @@ export default function AuthRegistrationPage() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <main>
       <Link to="/auth">돌아가기</Link>
       <RegisterByEmailSection onSuccess={() => navigate('/')} />
-    </div>
+    </main>
   );
 }
