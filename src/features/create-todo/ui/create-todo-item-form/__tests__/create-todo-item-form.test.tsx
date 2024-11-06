@@ -7,7 +7,9 @@ import CreateTodoItemForm, {
   type CreateTodoItemFormProps,
 } from '../create-todo-item-form';
 
-function renderCreateTodoItemForm(props: Partial<CreateTodoItemFormProps> = {}) {
+function renderCreateTodoItemForm(
+  props: Partial<CreateTodoItemFormProps> = {}
+) {
   const { values = { title: '', content: '' }, ...rest } = props;
 
   const result = render(<CreateTodoItemForm {...rest} values={values} />);
@@ -68,10 +70,9 @@ describe('<CreateTodoItemForm />', () => {
   it('values는 controlled 속성으로 반드시 onValuesChange로 변경할 값이 전달된다.', async () => {
     const handleChange = vi.fn();
 
-    const { changeTitle, changeContent } =
-      renderCreateTodoItemForm({
-        onValuesChange: handleChange,
-      });
+    const { changeTitle, changeContent } = renderCreateTodoItemForm({
+      onValuesChange: handleChange,
+    });
 
     await changeTitle('1');
     await changeContent('2');
