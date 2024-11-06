@@ -1,3 +1,4 @@
+import { CreateTodoSection } from '@/widgets/create-todo-section';
 import { LogoutButton } from '@/features/auth/logout';
 
 export default function HomePage() {
@@ -5,6 +6,7 @@ export default function HomePage() {
     <main>
       <h1>Home</h1>
       <LogoutButton />
+      <CreateTodoSection />
     </main>
   );
 }
