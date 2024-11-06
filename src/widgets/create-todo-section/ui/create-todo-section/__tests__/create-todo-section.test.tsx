@@ -120,4 +120,40 @@ describe("<CreateTodoSection />", () => {
       expect(ContentInput()).toHaveValue('');
     });
   });
+
+  it('401 에러가 발생하면 로그인 필요 안내', async () => {
+    server.use(
+      http.post(`${api.core}/todos`, () =>
+        HttpResponse.json({
+          details: 'Token is missing',
+        }, { status: 401 })));
+
+    const { submit, changeContent, changeTitle } = renderCreateTodoSection();
+
+    await changeTitle('제목');
+    await changeContent('내용');
+    await submit();
+
+    await vi.waitFor(() => {
+      expect(spyAlert).toHaveBeenCalledWith('인증이 만료되었습니다. 다시 로그인해주세요.');
+    });
+  });
+
+  it('에러가 발생하면 안내한다.', async () => {
+    server.use(
+      http.post(`${api.core}/todos`, () =>
+        HttpResponse.json({
+          details: 'input을 다시 확인해주세요',
+        }, { status: 400 })));
+
+    const { submit, changeContent, changeTitle } = renderCreateTodoSection();
+
+    await changeTitle('제목');
+    await changeContent('내용');
+    await submit();
+
+    vi.waitFor(() => {
+      expect(spyAlert).toHaveBeenCalledWith('input을 다시 확인해주세요');
+    });
+  });
 });

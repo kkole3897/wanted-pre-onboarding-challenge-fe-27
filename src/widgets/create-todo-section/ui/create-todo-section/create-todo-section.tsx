@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { CreateTodoItemForm, useCreateTodoMutation } from '@/features/create-todo';
+import { CreateTodoItemForm, useCreateTodoMutation, handleCreateError } from '@/features/create-todo';
 
 export default function CreateTodoSection() {
   const [values, setValues] = useState({ title: '', content: ''});
@@ -12,7 +12,7 @@ export default function CreateTodoSection() {
       alert('생성되었습니다.');
       setValues({ title: '', content: '' });
     } catch (error) {
-      // TODO: 에러 처리
+      handleCreateError(error);
     }
   }
 
