@@ -1,2 +1,2 @@
 export { sortTodos } from './lib';
-export { SortSelect } from './ui';
+export { SortSelect, OrderSelect } from './ui';
