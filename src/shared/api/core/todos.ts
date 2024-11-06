@@ -81,3 +81,41 @@ export const isGetAllError = (error: unknown): error is GetAllError => {
 
   return GetAllErrorDataSchema.safeParse(error.response?.data).success;
 };
+
+export const remove = async (id: string) => {
+  await client.delete(`/todos/${id}`);
+};
+
+const RemoveErrorDataSchema = z.object({
+  details: z.string(),
+});
+
+const RemoveServerErrorDataSchema = z.object({
+  message: z.string(),
+});
+
+type RemoveErrorData = z.infer<typeof RemoveErrorDataSchema>;
+
+type RemoveServerErrorData = z.infer<typeof RemoveServerErrorDataSchema>;
+
+type RemoveError = AxiosError<RemoveErrorData>;
+
+type RemoveServerError = AxiosError<RemoveServerErrorData>;
+
+export const isRemoveError = (error: unknown): error is RemoveError => {
+  if (!axios.isAxiosError(error)) {
+    return false;
+  }
+
+  return RemoveErrorDataSchema.safeParse(error.response?.data).success;
+};
+
+export const isRemoveServerError = (
+  error: unknown
+): error is RemoveServerError => {
+  if (!axios.isAxiosError(error)) {
+    return false;
+  }
+
+  return RemoveServerErrorDataSchema.safeParse(error.response?.data).success;
+};
