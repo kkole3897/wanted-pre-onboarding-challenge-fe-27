@@ -6,7 +6,6 @@ import userEvent from '@testing-library/user-event';
 import CollapsibleTodoItem, {
   type CollapsibleTodoItemProps,
 } from '../collapsible-todo-item';
-import { useEffect } from 'react';
 
 function renderCollapsibleTodoItem(props: CollapsibleTodoItemProps) {
   const result = render(<CollapsibleTodoItem {...props} />);
@@ -21,6 +20,8 @@ function renderCollapsibleTodoItem(props: CollapsibleTodoItemProps) {
 
   const RemoveButton = () => result.queryByText('삭제');
 
+  const RemovingButton = () => result.queryByText('삭제 중...');
+
   const open = async () => await userEvent.click(OpenButton()!);
 
   const close = async () => await userEvent.click(CloseButton()!);
@@ -33,6 +34,7 @@ function renderCollapsibleTodoItem(props: CollapsibleTodoItemProps) {
     OpenButton,
     CloseButton,
     RemoveButton,
+    RemovingButton,
     open,
     close,
     remove,
@@ -116,5 +118,27 @@ describe('<CollapsibleTodoItem />', () => {
     await remove();
 
     expect(handleDelete).toHaveBeenCalledWith({ id: '1' });
+  });
+
+  it('삭제 중인 경우에는 삭제 버튼을 비활성화하고, 삭제 중임을 나타낸다.', async () => {
+    const handleDelete = vi.fn();
+
+    const { remove, RemovingButton } = renderCollapsibleTodoItem({
+      todo: {
+        id: '1',
+        title: '제목',
+        content: '내용',
+        createdAt: '2024-10-31T21:56:05.364Z',
+        updatedAt: '2024-10-31T21:56:05.364Z',
+      },
+      onDelete: handleDelete,
+      deleting: true,
+    });
+
+    await remove();
+
+    expect(RemovingButton()).toBeInTheDocument();
+    expect(RemovingButton()).toBeDisabled();
+    expect(handleDelete).not.toHaveBeenCalled();
   });
 });
