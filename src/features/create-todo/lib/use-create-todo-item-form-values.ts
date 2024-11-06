@@ -1,35 +1,43 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { CreateTodoItemData, CreateTodoItemDataSchema } from '../model';
 
-type FormValues = Pick<CreateTodoItemData, 'title'>;
+export type FormValues = CreateTodoItemData;
 
-export function useCreateTodoItemFormValues() {
-  const [values, setValues] = useState<FormValues>({
-    title: '',
-  });
-
+export function useCreateTodoItemFormValues(values: FormValues) {
   const isValid = useMemo(() => {
     return CreateTodoItemDataSchema.safeParse(values).success;
   }, [values]);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    const { name, value } = event.target;
+  const createHandleChange =
+    <T extends HTMLInputElement | HTMLTextAreaElement>(
+      onValuesChange?: (values: FormValues) => void
+    ) =>
+    (event: React.ChangeEvent<T>) => {
+      const { name, value } = event.target;
 
-    if (!values.hasOwnProperty(name)) {
-      return;
-    }
+      if (!values.hasOwnProperty(name)) {
+        return;
+      }
 
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
+      onValuesChange?.({
+        ...values,
+        [name]: value,
+      });
+    };
 
-  const register = (name: keyof FormValues) => {
+  const register = (
+    name: keyof FormValues,
+    {
+      onChange,
+    }: {
+      onChange?: (values: FormValues) => void;
+    } = {}
+  ) => {
     return {
       name,
-      onChange: handleChange,
+      value: values[name],
+      onChange: createHandleChange(onChange),
     };
   };
 
@@ -52,7 +60,6 @@ export function useCreateTodoItemFormValues() {
     };
 
   return {
-    values,
     isValid,
     register,
     createHandleSubmit,

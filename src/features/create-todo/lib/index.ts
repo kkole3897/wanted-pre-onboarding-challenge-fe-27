@@ -1,1 +1,4 @@
-export { useCreateTodoItemFormValues } from './use-create-todo-item-form-values';
+export {
+  useCreateTodoItemFormValues,
+  type FormValues as CreateTodoItemFormValues,
+} from './use-create-todo-item-form-values';
