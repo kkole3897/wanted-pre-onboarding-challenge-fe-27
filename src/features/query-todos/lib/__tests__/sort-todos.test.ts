@@ -59,7 +59,7 @@ describe('sortTodos', () => {
       },
     ];
 
-    const sortedTodos = sortTodos(todos, { orderBy: 'asc' });
+    const sortedTodos = sortTodos(todos, { order: 'asc' });
 
     expect(sortedTodos).toEqual([
       {
@@ -137,7 +137,7 @@ describe('sortTodos', () => {
 
     const sortedTodos = sortTodos(todos, {
       sortBy: 'updated_at',
-      orderBy: 'asc',
+      order: 'asc',
     });
 
     expect(sortedTodos).toEqual([
@@ -214,7 +214,7 @@ describe('sortTodos', () => {
       },
     ];
 
-    const sortedTodos = sortTodos(todos, { sortBy: 'title', orderBy: 'asc' });
+    const sortedTodos = sortTodos(todos, { sortBy: 'title', order: 'asc' });
 
     expect(sortedTodos).toEqual([
       {

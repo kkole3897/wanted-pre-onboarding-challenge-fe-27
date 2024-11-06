@@ -4,19 +4,19 @@ import { sorted } from '@/shared/lib/array';
 
 type SortTodosOptions = {
   /**
-   * @default 'createdAt'
+   * @default 'created_at'
    */
   sortBy?: SortKey;
   /**
    * @default 'desc'
    */
-  orderBy?: OrderKey;
+  order?: OrderKey;
 };
 
 export function sortTodos(todos: TodoItem[], options: SortTodosOptions = {}) {
-  const { sortBy = 'created_at', orderBy = 'desc' } = options;
+  const { sortBy = 'created_at', order = 'desc' } = options;
 
-  const reverseConstant = orderBy === 'asc' ? 1 : -1;
+  const reverseConstant = order === 'asc' ? 1 : -1;
 
   const compareFns = {
     created_at: (a: TodoItem, b: TodoItem) =>
@@ -29,5 +29,7 @@ export function sortTodos(todos: TodoItem[], options: SortTodosOptions = {}) {
 
   const compareFn = compareFns[sortBy];
 
-  return sorted(todos, compareFn);
+  const result = sorted(todos, compareFn);
+
+  return result;
 }
