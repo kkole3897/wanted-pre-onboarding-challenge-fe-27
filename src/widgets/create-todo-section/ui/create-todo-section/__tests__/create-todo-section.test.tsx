@@ -67,11 +67,11 @@ describe("<CreateTodoSection />", () => {
   it('Todo 생성 성공하면 성공을 안내한다.', async () => {
     server.use(
       http.post(`${api.core}/todos`, () => HttpResponse.json({
-        title: "1",
+        data: {title: "1",
         content: "",
         id: "U1czm9qCrZCZGcN3K2yq3",
         createdAt: "2024-10-31T21:56:05.364Z",
-        updatedAt: "2024-10-31T21:56:05.364Z"
+        updatedAt: "2024-10-31T21:56:05.364Z"}
       },
       { status: 200 }
       )
@@ -91,11 +91,13 @@ describe("<CreateTodoSection />", () => {
   it('Todo 생성 성공하면 입력값을 초기화한다.', async () => {
     server.use(
       http.post(`${api.core}/todos`, () => HttpResponse.json({
-        title: "제목",
-        content: "내용",
-        id: "U1czm9qCrZCZGcN3K2yq3",
-        createdAt: "2024-10-31T21:56:05.364Z",
-        updatedAt: "2024-10-31T21:56:05.364Z"
+        data: {
+          title: "제목",
+          content: "내용",
+          id: "U1czm9qCrZCZGcN3K2yq3",
+          createdAt: "2024-10-31T21:56:05.364Z",
+          updatedAt: "2024-10-31T21:56:05.364Z",
+        },
       },
       { status: 200 }
       )

@@ -23,7 +23,7 @@ export const create = async (
 ): Promise<CreateResponse> => {
   const response = await client.post('/todos', payload);
 
-  return validateCreateResponse(response.data);
+  return validateCreateResponse(response.data.data);
 };
 
 function validateCreateResponse(data: unknown): CreateResponse {
