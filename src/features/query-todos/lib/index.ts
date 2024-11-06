@@ -1,2 +1,2 @@
 export { sortTodos } from './sort-todos';
-export { useQueryState } from './use-query-state';
+export { useQueryContext, QueryProvider } from './query-context';
