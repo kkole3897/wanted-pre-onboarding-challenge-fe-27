@@ -45,3 +45,39 @@ export const isCreateError = (error: unknown): error is CreateError => {
 
   return CreateErrorDataSchema.safeParse(error.response?.data).success;
 };
+
+const TodoItemResponseSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  content: z.string(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+type TodoItemResponse = z.infer<typeof TodoItemResponseSchema>;
+
+function validateGetAllResponse(data: unknown): TodoItemResponse[] {
+  return z.array(TodoItemResponseSchema).parse(data);
+}
+
+export const getAll = async (): Promise<TodoItemResponse[]> => {
+  const response = await client.get('/todos');
+
+  return validateGetAllResponse(response.data.data);
+};
+
+const GetAllErrorDataSchema = z.object({
+  details: z.string(),
+});
+
+type GetAllErrorData = z.infer<typeof GetAllErrorDataSchema>;
+
+type GetAllError = AxiosError<GetAllErrorData>;
+
+export const isGetAllError = (error: unknown): error is GetAllError => {
+  if (!axios.isAxiosError(error)) {
+    return false;
+  }
+
+  return GetAllErrorDataSchema.safeParse(error.response?.data).success;
+};
