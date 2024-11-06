@@ -2,7 +2,6 @@ import '@testing-library/jest-dom/vitest';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useState } from 'react';
 
 import CreateTodoItemForm, {
   type CreateTodoItemFormProps,
