@@ -14,7 +14,12 @@ function formatSortKey(key: SortKey): string {
   }
 }
 
-export default function SortSelect() {
+export type SortSelectProps = {
+  value: SortKey;
+  onValueChange: (value: SortKey) => void;
+};
+
+export default function SortSelect({ value, onValueChange }: SortSelectProps) {
   const options = Object.values(SORT_KEYS).map((key) => {
     return {
       value: key,
@@ -23,7 +28,13 @@ export default function SortSelect() {
   });
 
   return (
-    <select name="sortBy">
+    <select
+      name="sortBy"
+      value={value}
+      onChange={(event) => {
+        onValueChange(event.target.value as SortKey);
+      }}
+    >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}
