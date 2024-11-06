@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -13,6 +13,11 @@ export function useQueryState() {
   const [query, setQuery] = useState(() =>
     convertSearchParamsToQuery(searchParams)
   );
+
+  useEffect(() => {
+    const newQuery = convertSearchParamsToQuery(searchParams);
+    setQuery(newQuery);
+  }, [searchParams]);
 
   const handleChangeQuery = (newQuery: Query) => {
     setQuery(newQuery);
